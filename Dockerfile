@@ -1,13 +1,12 @@
 FROM ubuntu:16.04
-MAINTAINER ljozsa@gmail.com
+MAINTAINER l.jozsa@gmail.com
 ENV DEBIAN_FRONTEND=noninteractive
 ENV UNAME pacat
 ENV DISPLAY=:0
-ENV PULSE_SERVER=unix:/tmp/pulseaudio.socket
-ENV PULSE_COOKIE=/tmp/pulseaudio.cookie
 
+RUN apt-get clean
 RUN apt-get update
-RUN apt-get install -y curl apt-utils iproute2 iputils-ping sudo pulseaudio-utils libcurl3 pulseaudio less mplayer
+RUN apt-get install -y curl apt-utils iproute2 sudo pulseaudio-utils libcurl3 pulseaudio less mplayer iputils-ping
 RUN echo -e 'default-server = unix:/tmp/pulseaudio.socket\n\
 	\# Prevent a server running in the container\n\
 	autospawn = no\n\
