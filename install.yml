@@ -40,11 +40,22 @@
       copy:
         src: kuki-tv.desktop
         dest: "{{ ansible_user_dir }}/.local/share/applications/kuki-tv.desktop"
-        owner: tata
-        group: tata
-        mode: 0700
+        owner: "{{ ansible_env.USER }}"
+        group: "{{ ansible_env.USER }}"
+        mode: 0600
 
     - name: create a runtime dir
       file:
         name: "{{ ansible_user_dir }}/pacat"
         state: directory
+
+    - name: create a bin dir for the kuki wrapper
+      file:
+        name: "{{ ansible_user_dir }}/bin"
+        state: directory
+
+    - name: copy wrapper to the bin dir
+      copy:
+        src: kuki
+        dest: "{{ ansible_user_dir }}/bin/kuki"
+        mode: 0755

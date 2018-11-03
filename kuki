@@ -1,0 +1,2 @@
+#!/bin/bash
+/bin/sudo /usr/bin/docker run -v /tmp/.X11-unix:/tmp/.X11-unix -v /run/user/$(id -u)/pulse:/run/user/1000/pulse -v ~/pacat:/home/pacat --device /dev/dri --privileged -d kuki kuki
