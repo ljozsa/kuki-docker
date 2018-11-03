@@ -1,0 +1,50 @@
+--- 
+- hosts: localhost
+  become: true
+  tasks:
+    - name: Install prereqs
+      yum:
+        name:
+          - git
+          - docker
+        state: latest
+
+    - name: "Enable and start Docker"
+      service:
+        name: docker
+        state: started
+        enabled: true
+
+    - name: "Download kuki.tv repo"
+      git:
+        repo: https://github.com/ljozsa/kuki-docker.git
+        dest: "{{ ansible_user_dir }}/kuki-docker"
+
+    - name: build kuki.tv container
+      shell: docker build -t kuki .
+      args:
+        chdir: "{{ ansible_user_dir }}/kuki-docker"
+
+    - name: Install kuki.tv icon
+      copy:
+        src: kuki-512px.png
+        dest: /usr/share/icons/hicolor/512x512/apps/kuki-512px.png
+        setype: usr_t
+        serole: object_r
+        seuser: system_u
+        selevel: s0
+        owner: root
+        group: root
+
+    - name: Install GNOME3 app and icon
+      copy:
+        src: kuki-tv.desktop
+        dest: "{{ ansible_user_dir }}/.local/share/applications/kuki-tv.desktop"
+        owner: tata
+        group: tata
+        mode: 0700
+
+    - name: create a runtime dir
+      file:
+        name: "{{ ansible_user_dir }}/pacat"
+        state: directory
